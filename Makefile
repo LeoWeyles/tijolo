@@ -1,4 +1,4 @@
-.PHONY: all debug test install install-fonts uninstall uninstall-fonts
+.PHONY: all cimento debug test install install-fonts uninstall uninstall-fonts
 PREFIX ?= /usr
 
 all:
@@ -12,6 +12,9 @@ test:
 	else\
 	  GC_DONT_GC=1 LC_ALL=en_US.UTF8 xvfb-run crystal spec;\
 	fi
+
+cimento:
+	shards build --ignore-crystal-version --error-trace --debug -Dpreview_mt -Dcimento
 
 install:
 	install -D -m 0755 bin/tijolo $(DESTDIR)$(PREFIX)/bin/tijolo
