@@ -32,14 +32,14 @@ class Application
     setup_actions
 
     not_ported!
-    # builder = builder_for("header_bar")
-#     @header_bar = Gtk::HeaderBar.cast(builder["root"])
-#     @new_tijolo_btn = Gtk::Button.cast(builder["new_tijolo_btn"])
-#     @recent_files_btn = Gtk::MenuButton.cast(builder["recent_files_btn"])
-#
-#     init_recent_files_menu
-#     main_window.titlebar = header_bar
-#
+    builder = builder_for("header_bar")
+    @header_bar = Gtk::HeaderBar.cast(builder["root"])
+    @new_tijolo_btn = Gtk::Button.cast(builder["new_tijolo_btn"])
+    @recent_files_btn = Gtk::MenuButton.cast(builder["recent_files_btn"])
+
+    init_recent_files_menu
+    main_window.titlebar = header_bar
+
     apply_css
 
     init_welcome unless open_project(@argv_files)
@@ -47,22 +47,23 @@ class Application
   end
 
   def setup_actions
+    # Hamburguer menu
+    preferences = Gio::SimpleAction.new("preferences", nil)
+    preferences.activate_signal.connect { show_preferences_dlg }
+    main_window.add_action(preferences)
+    about = Gio::SimpleAction.new("about", nil)
+    about.activate_signal.connect { show_about_dlg }
+    main_window.add_action(about)
+
+    string = GLib::VariantType.new("s")
     not_ported!
-#     # Hamburguer menu
-#     preferences = Gio::SimpleAction.new("preferences", nil)
-#     preferences.activate_signal.connect { show_preferences_dlg }
-#     main_window.add_action(preferences)
-#     about = Gio::SimpleAction.new("about", nil)
-#     about.on_activate { show_about_dlg }
-#     main_window.add_action(about)
-#
-#     string = GLib::VariantType.new("s")
-#     open_recent = Gio::SimpleAction.new("open_recent_file", string)
-#     open_recent.on_activate(&->open_recent_file(Gio::SimpleAction, GLib::Variant?))
-#     main_window.add_action(open_recent)
-#
-#     # global actions with shortcuts
-#     config = Config.instance
+    open_recent = Gio::SimpleAction.new("open_recent_file", string)
+    not_ported!
+    # open_recent.activate_signal.connect(&->open_recent_file(GLib::Variant?))
+    main_window.add_action(open_recent)
+
+    # global actions with shortcuts
+    config = Config.instance
 #     actions = {new_file:            ->new_file,
 #                new_file_new_split:  ->{ new_file(true) },
 #                open_file:           ->open_file,
@@ -102,7 +103,8 @@ class Application
   end
 
   def new_file(new_split = false)
-    ide.create_view(nil, new_split)
+    not_ported!
+    # ide.create_view(nil, new_split)
   end
 
   def new_terminal
@@ -134,8 +136,9 @@ class Application
     end
   end
 
-  def open_recent_file(_action : Gio::SimpleAction, file : GLib::Variant?)
-    ide.open_file(Path.new(file.string)) unless file.nil?
+  def open_recent_file(file : GLib::Variant)
+    not_ported!
+    # ide.open_file(Path.new(file.string)) unless file.nil?
     reload_recent_files_menu
   end
 
@@ -165,26 +168,23 @@ class Application
   def show_preferences_dlg
     Config.create_config_if_needed
 
-    ide.open_file(Config.path)
+    not_ported!
+    # ide.open_file(Config.path)
   end
 
   def show_about_dlg
-    dialog = Gtk::AboutDialog.new(application: @application,
-      transient_for: main_window,
+    Gtk.show_about_dialog(parent: main_window,
+      application: @application,
       copyright: "© 2020-2021 Hugo Parente Lima",
       version: "#{VERSION} (Crystal #{Crystal::VERSION})",
       program_name: "Tijolo",
       logo_icon_name: "io.github.hugopl.Tijolo",
       comments: "Lightweight, keyboard-oriented IDE for the masses",
-      website: "https://github.com/hugopl/tijolo", # "https://hugopl.github.io/tijolo",
+      website: "https://github.com/hugopl/tijolo",
       website_label: "Learn more about Tijolo",
-      license: Compiled::License.display)
-    # FIXME: Need to fill a bug into crystal-gobject about set these properties on ctor.
-    dialog.authors = {"Hugo Parente Lima <hugo.pl@gmail.com>"}
-    dialog.artists = {"Marília Riul <mmriul@gmail.com>"}
-
-    dialog.on_response { dialog.close }
-    dialog.run
+      license: Compiled::License.display,
+      authors: {"Hugo Parente Lima <hugo.pl@gmail.com>"},
+      artists: {"Marília Riul <mmriul@gmail.com>"})
   end
 
   def open_project(project_path : String) : Bool
