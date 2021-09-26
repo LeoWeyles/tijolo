@@ -56,21 +56,20 @@ class Application
     main_window.add_action(about)
 
     string = GLib::VariantType.new("s")
-    not_ported!
     open_recent = Gio::SimpleAction.new("open_recent_file", string)
-    not_ported!
-    # open_recent.activate_signal.connect(&->open_recent_file(GLib::Variant?))
+    open_recent.activate_signal.connect(&->open_recent_file(GLib::Variant))
     main_window.add_action(open_recent)
 
     # global actions with shortcuts
+    not_ported!
     config = Config.instance
-#     actions = {new_file:            ->new_file,
-#                new_file_new_split:  ->{ new_file(true) },
-#                open_file:           ->open_file,
-#                open_file_new_split: ->{ open_file(true) },
-#                open_project:        ->start_new_tijolo,
+    actions = {new_file:            ->new_file,
+               new_file_new_split:  ->{ new_file(true) },
+               open_file:           ->open_file,
+               open_file_new_split: ->{ open_file(true) },
+               open_project:        ->start_new_tijolo,
 #                new_terminal:        ->new_terminal,
-#                fullscreen:          ->fullscreen}
+               fullscreen:          ->fullscreen}
 #     actions.each do |name, closure|
 #       action = Gio::SimpleAction.new(name.to_s, nil)
 #       action.on_activate { closure.call }
@@ -112,28 +111,30 @@ class Application
   end
 
   def open_file(new_split = false)
-    dlg = Gtk::FileChooserDialog.new(title: "Open file", action: :open, local_only: true, modal: true,
-      transient_for: main_window)
-    dlg.add_button("Cancel", Gtk::ResponseType::CANCEL.value)
-    dlg.add_button("Open", Gtk::ResponseType::ACCEPT.value)
+    dlg = Gtk::FileChooserDialog.new(title: "Open file", action: :open, transient_for: main_window)
+    dlg.add_button("Cancel", Gtk::ResponseType::Cancel.value)
+    dlg.add_button("Open", Gtk::ResponseType::Accept.value)
 
     ide_wnd = @ide_wnd
-    dlg.current_folder_uri = ide_wnd.project.root.to_uri.to_s if ide_wnd && ide_wnd.project.valid?
+    dlg.current_folder = Gio::File.new_for_path(ide_wnd.project.root.to_uri.to_s) if ide_wnd && ide_wnd.project.valid?
 
-    res = dlg.run
-    uri = dlg.uri if res == Gtk::ResponseType::ACCEPT.value
-    dlg.destroy
-    return if uri.nil?
+    dlg.response_signal.connect do |response|
+      if response == Gtk::ResponseType::Accept.value
+        file_path = dlg.file.path
+        next if file_path.nil?
 
-    file_path = Path.new(URI.parse(uri).request_target)
-    # If this zillion questions are true... the user is opening a file from another project on this project
-    # So we ask if the file should be opened in another Tijolo instance.
-    if ide_wnd && ide_wnd.project.valid? && !ide_wnd.project.under_project?(file_path) &&
-       Project.valid?(file_path) && open_another_tijolo_instance?(file_path)
-      start_new_tijolo(file_path.to_s)
-    else
-      ide.open_file(file_path, new_split)
+        # If this zillion questions are true... the user is opening a file from another project on this project
+        # So we ask if the file should be opened in another Tijolo instance.
+        if ide_wnd && ide_wnd.project.valid? && !ide_wnd.project.under_project?(file_path) && Project.valid?(file_path)
+          open_another_tijolo_or_file(file_path, new_split)
+        else
+          ide.open_file(file_path, new_split)
+        end
+      end
+    ensure
+      dlg.destroy
     end
+    dlg.present
   end
 
   def open_recent_file(file : GLib::Variant)
@@ -160,8 +161,8 @@ class Application
     @fullscreen = !@fullscreen
   end
 
-  def start_new_tijolo(file : String? = nil)
-    args = file.nil? ? nil : {file}
+  def start_new_tijolo(file : Path? = nil)
+    args = file.nil? ? nil : {file.to_s}
     Process.new(Process.executable_path.to_s, args)
   end
 
@@ -228,7 +229,9 @@ class Application
   end
 
   def destroy_welcome
-    @welcome_wnd.try(&.destroy)
+    not_ported!
+    # Maybe need to disconnect all signals to let GC destroy the widget
+    # @welcome_wnd.try(&.destroy)
     @welcome_wnd = nil
   end
 
@@ -256,17 +259,17 @@ class Application
     @application.run(argv)
   end
 
-  def open_another_tijolo_instance?(file : Path) : Bool
+  def open_another_tijolo_or_file(file : Path, new_split : Bool) : Nil
     label = relative_path_label(file)
-    dialog = Gtk::MessageDialog.new(text: "Open “#{label}” in another Tijolo instance?",
-      secondary_text: "It belongs to another git repository.",
-      buttons: :yes_no, message_type: :question,
-      transient_for: main_window)
-    dialog.on_response { dialog.close }
 
-    res = dialog.run
-    dialog.destroy
-    res == Gtk::ResponseType::YES.value
+    Gtk::MessageDialog.yes_no(message_type: :question, transient_for: main_window,
+      text: "Open “#{label}” in another Tijolo instance?", secondary_text: "It belongs to another git repository.") do |res|
+      if res == Gtk::ResponseType::Yes.value
+        start_new_tijolo(file)
+      else
+        ide.open_file(file, new_split)
+      end
+    end
   end
 
   def error(exception : Exception) : Nil
@@ -275,10 +278,6 @@ class Application
 
   def error(title : String, message : String) : Nil
     Log.warn { message }
-    dialog = Gtk::MessageDialog.new(text: title, secondary_text: message,
-      message_type: :error, buttons: :ok, transient_for: main_window)
-    dialog.on_response { dialog.close }
-    dialog.run
-    dialog.destroy
+    Gtk::MessageDialog.ok(text: title, secondary_text: message, message_type: :error, transient_for: main_window) {}
   end
 end

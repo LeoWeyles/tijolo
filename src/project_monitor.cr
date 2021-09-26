@@ -24,7 +24,8 @@ class ProjectMonitor
     return if @monitors.has_key?(dir)
 
     @monitors[dir] = monitor = Gio::File.new_for_path(dir).monitor_directory(:none, nil)
-    monitor.on_changed(&->file_changed(Gio::FileMonitor, Gio::File, Gio::File?, Gio::FileMonitorEvent))
+    not_ported!
+    # monitor.on_changed(&->file_changed(Gio::FileMonitor, Gio::File, Gio::File?, Gio::FileMonitorEvent))
   end
 
   private def destroy_monitor(dir : String)

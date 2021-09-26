@@ -30,7 +30,7 @@ class ViewManager
   delegate current_view, to: @root
 
   def initialize(@gtk_views_view)
-    @model = Gtk::ListStore.new({GObject::Type::UTF8, GObject::Type::UTF8})
+    @model = Gtk::ListStore.new({GObject::TYPE_STRING, GObject::TYPE_STRING})
     @root = Split::RootNode.new
     @gtk_views_view.model = @model
   end

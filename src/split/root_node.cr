@@ -21,7 +21,8 @@ module Split
     def initialize
       create_empty_view
       super(self)
-      @stack.show_all
+      not_ported!
+      # @stack.show_all
     end
 
     def widget

@@ -44,9 +44,8 @@ class ProjectTree
       collection.insert(idx, node)
 
       if indices.any?
-        parent_iter = Gtk::TreeIter.new
         tree_path = Gtk::TreePath.new_from_indices(indices)
-        model.iter(parent_iter, tree_path)
+        parent_iter = model.iter(tree_path)
       end
 
       is_folder = node.is_a?(FolderNode)
@@ -89,9 +88,8 @@ class ProjectTree
       collection.delete_at(idx)
 
       indices << idx + idx_offset
-      iter = Gtk::TreeIter.new
       tree_path = Gtk::TreePath.new_from_indices(indices)
-      model.iter(iter, tree_path)
+      iter = model.iter(tree_path)
       model.remove(iter)
       indices.pop
       true

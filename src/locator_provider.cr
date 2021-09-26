@@ -12,7 +12,7 @@ abstract class LocatorProvider
   getter model : Gtk::ListStore
 
   def initialize
-    @model = Gtk::ListStore.new({GObject::Type::UTF8})
+    @model = Gtk::ListStore.new({GObject::TYPE_STRING})
   end
 
   # Called when the locator was selected with the current_view focused.

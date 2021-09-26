@@ -11,7 +11,7 @@ class GitBranches
   getter model : Gtk::ListStore
 
   def initialize(@project : Project)
-    @model = Gtk::ListStore.new({GObject::Type::UTF8, GObject::Type::UTF8})
+    @model = Gtk::ListStore.new({GObject::TYPE_STRING, GObject::TYPE_STRING})
     @project.add_project_listener(self)
   end
 
@@ -21,8 +21,9 @@ class GitBranches
   end
 
   def switch_branch(tree_path : Gtk::TreePath)
-    branch = @model.value(tree_path, BRANCH_NAME_COL).string
-    Git.run_cli({"checkout", branch}) unless branch.empty?
+    not_ported!
+    # branch = @model.value(tree_path, BRANCH_NAME_COL).string
+    # Git.run_cli({"checkout", branch}) unless branch.empty?
   end
 
   private def fill_model
@@ -44,13 +45,15 @@ class GitBranches
 
   private def create_monitor
     head = "#{@project.root}/.git/HEAD"
-    Gio::File.new_for_path(head).monitor_file(:none, nil).on_changed do
-      fill_model
-    end
+    not_ported!
+    # Gio::File.new_for_path(head).monitor_file(:none, nil).on_changed do
+    #   fill_model
+    # end
 
     heads = "#{@project.root}/.git/refs/heads"
-    Gio::File.new_for_path(heads).monitor_directory(:none, nil).on_changed do
-      fill_model
-    end
+    not_ported!
+    # Gio::File.new_for_path(heads).monitor_directory(:none, nil).on_changed do
+    #   fill_model
+    # end
   end
 end

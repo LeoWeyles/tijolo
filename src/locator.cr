@@ -45,10 +45,12 @@ class Locator
     @locator_widget = Gtk::Widget.cast(builder["locator_widget"])
 
     @locator_entry = Gtk::Entry.cast(builder["locator_entry"])
-    @locator_entry.on_key_press_event(&->entry_key_pressed(Gtk::Widget, Gdk::EventKey))
-    @locator_entry.on_activate(&->activated(Gtk::Entry))
-    @locator_entry.connect("notify::text", &->search_changed)
-    @locator_entry.after_focus_out_event(&->focus_out_event(Gtk::Widget, Gdk::EventFocus))
+
+    not_ported!
+    # @locator_entry.on_key_press_event(&->entry_key_pressed(Gtk::Widget, Gdk::EventKey))
+    # @locator_entry.on_activate(&->activated(Gtk::Entry))
+    # @locator_entry.connect("notify::text", &->search_changed)
+    # @locator_entry.after_focus_out_event(&->focus_out_event(Gtk::Widget, Gdk::EventFocus))
 
     @default_locator_provider = FileLocator.new(@project)
     @current_locator_provider = @help_locator_provider = HelpLocator.new
@@ -56,7 +58,8 @@ class Locator
     @locator_results = Gtk::TreeView.cast(builder["locator_results"])
     @locator_results.selection.mode = :browse
     @locator_results.model = @help_locator_provider.model
-    @locator_results.on_row_activated(&->activated(Gtk::TreeView, Gtk::TreePath, Gtk::TreeViewColumn))
+    not_ported!
+    # @locator_results.on_row_activated(&->activated(Gtk::TreeView, Gtk::TreePath, Gtk::TreeViewColumn))
 
     init_locators
   end

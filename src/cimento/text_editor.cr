@@ -34,7 +34,7 @@ module Editor
     def initialize
       @buffer = TextBuffer.new
       @widget = Gtk::DrawingArea.new
-      @font_desc = Pango.font_description_from_string("JetBrainsMono Nerd Font")
+      @font_desc = Pango::FontDescription.from_string("JetBrainsMono Nerd Font")
 
       # @widget.on_draw(&->render(Gtk::Widget, Cairo::Context))
     end

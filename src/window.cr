@@ -11,8 +11,4 @@ abstract class Window
   def initialize(@application : Application, builder : Gtk::Builder)
     @root = Gtk::Widget.cast(builder["root"])
   end
-
-  def destroy
-    @root.destroy
-  end
 end

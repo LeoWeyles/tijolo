@@ -10,6 +10,8 @@ module UiBuilderHelper
 
   protected def apply_css
     display = Gdk::Display.default
+    raise AppError.new("No default display found.") if display.nil?
+
     css_provider = Gtk::CssProvider.new
     css_provider.load_from_data(application_css)
     Gtk::StyleContext.add_provider_for_display(display, css_provider, Gtk::STYLE_PROVIDER_PRIORITY_APPLICATION.to_u32)

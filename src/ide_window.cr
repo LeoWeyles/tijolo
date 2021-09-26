@@ -65,22 +65,25 @@ class IdeWindow < Window
 
     notification_area = NotificationArea.new
     overlay.add_overlay(notification_area.widget)
-    overlay.set_overlay_pass_through(notification_area.widget, true)
+    not_ported!
+    # overlay.set_overlay_pass_through(notification_area.widget, true)
 
     @cursor_history = CursorHistory.new
 
     # Find widget
     @find_replace = FindReplace.new
     editor_box = Gtk::Box.cast(builder["editor_box"])
-    editor_box.pack_end(@find_replace.widget, fill: true, expand: false, padding: 0)
-    editor_box.reorder_child(@find_replace.widget, 1)
+    not_ported!
+    # editor_box.pack_end(@find_replace.widget, fill: true, expand: false, padding: 0)
+    # editor_box.reorder_child(@find_replace.widget, 1)
 
     # Open Files view
     view_manager_view = Gtk::TreeView.cast(builder["view_manager_view"])
     @open_files_box = Gtk::Box.cast(builder["open_files"])
     @view_manager = ViewManager.new(view_manager_view)
     editor_box = Gtk::Box.cast(builder["editor_box"])
-    editor_box.pack_start(@view_manager.widget, true, true, 0)
+    not_ported!
+    # editor_box.pack_start(@view_manager.widget, true, true, 0)
     overlay.add_overlay(@open_files_box)
 
     @sidebar = Gtk::Box.cast(builder["sidebar"])
@@ -89,18 +92,21 @@ class IdeWindow < Window
     @branches = GitBranches.new(@project)
     @branches_view = Gtk::TreeView.cast(builder["git_branches"])
     @branches_view.model = @branches.model
-    @branches_view.on_row_activated(&->switch_branch_from_branches_view(Gtk::TreeView, Gtk::TreePath, Gtk::TreeViewColumn))
+    not_ported!
+    # @branches_view.on_row_activated(&->switch_branch_from_branches_view(Gtk::TreeView, Gtk::TreePath, Gtk::TreeViewColumn))
 
     # Setup Project Tree view
     @project_tree = ProjectTree.new(@project)
     @project_tree_view = Gtk::TreeView.cast(builder["project_tree"])
     @project_tree_view.model = @project_tree.model
-    @project_tree_view.on_row_activated(&->open_file_from_project_tree(Gtk::TreeView, Gtk::TreePath, Gtk::TreeViewColumn))
+    not_ported!
+    # @project_tree_view.on_row_activated(&->open_file_from_project_tree(Gtk::TreeView, Gtk::TreePath, Gtk::TreeViewColumn))
 
-    main_window.on_key_press_event(&->key_press_event(Gtk::Widget, Gdk::EventKey))
-    main_window.on_key_release_event(&->key_release_event(Gtk::Widget, Gdk::EventKey))
-    main_window.on_delete_event(&->about_to_quit(Gtk::Widget, Gdk::Event))
-    main_window.connect("notify::is-active") { main_window_active_changed }
+    not_ported!
+    # main_window.on_key_press_event(&->key_press_event(Gtk::Widget, Gdk::EventKey))
+    # main_window.on_key_release_event(&->key_release_event(Gtk::Widget, Gdk::EventKey))
+    # main_window.on_delete_event(&->about_to_quit(Gtk::Widget, Gdk::Event))
+    # main_window.connect("notify::is-active") { main_window_active_changed }
 
     logger = TijoloLogBackend.instance
     logger.gtk_buffer = Gtk::TextView.cast(builder["log"]).buffer
@@ -124,13 +130,16 @@ class IdeWindow < Window
   end
 
   def project_load_finished
-    @sidebar.show_all
+    not_ported!
+    # @sidebar.show_all
     # Setup title bar
-    application.header_bar.title = @project.name
-    application.header_bar.subtitle = relative_path_label(@project.root)
+    not_ported!
+    # application.header_bar.title = @project.name
+    # application.header_bar.subtitle = relative_path_label(@project.root)
     application.destroy_welcome
     # Need this to let GTK resize the git branches view
-    Gtk::Container.cast(root).check_resize
+    not_ported!
+    # Gtk::Container.cast(root).check_resize
 
     @lang_manager.start_languages_for(@project.files) unless Config.instance.lazy_start_language_servers?
   end

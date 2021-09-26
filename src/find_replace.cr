@@ -30,9 +30,10 @@ class FindReplace
     @label = Gtk::Label.cast(builder["find_label"])
     @find_message = Gtk::Label.cast(builder["find_message"])
 
-    @entry.on_key_press_event(&->entry_key_pressed(Gtk::Widget, Gdk::EventKey))
-    @entry.connect("notify::text") { find(@text_view) }
-    @entry.on_activate { activate }
+    not_ported!
+    # @entry.on_key_press_event(&->entry_key_pressed(Gtk::Widget, Gdk::EventKey))
+    # @entry.connect("notify::text") { find(@text_view) }
+    # @entry.on_activate { activate }
   end
 
   def widget

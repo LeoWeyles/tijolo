@@ -16,7 +16,6 @@ abstract class ConfirmDialog
 
   def initialize(parent : Gtk::Widget, @views : Array(View))
     builder = builder_for("confirm_dialog")
-    builder.connect_signals
     @dialog = Gtk::MessageDialog.cast(builder["root"])
     @dialog.transient_for = parent
 
@@ -34,7 +33,8 @@ abstract class ConfirmDialog
 
     @model = Gtk::ListStore.cast(builder["model"])
     toggle = Gtk::CellRendererToggle.cast(builder["toggle"])
-    toggle.on_toggled(&->toggle_file(Gtk::CellRendererToggle, String))
+    not_ported!
+    # toggle.on_toggled(&->toggle_file(Gtk::CellRendererToggle, String))
     fill_model
     @toogle_status = Array(Bool).new(@views.size, true)
 
