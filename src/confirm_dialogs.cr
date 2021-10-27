@@ -23,7 +23,7 @@ abstract class ConfirmDialog
       @dialog.secondary_text = secondary_text
     else
       contents = Gtk::Box.cast(builder["contents"])
-      Gtk::Box.cast(@dialog.message_area).add(contents)
+      Gtk::Box.cast(@dialog.message_area).append(contents)
       Gtk::Label.cast(builder["model_label"]).text = model_label
       Gtk::Label.cast(builder["secondary_label"]).text = secondary_text
     end
@@ -39,7 +39,6 @@ abstract class ConfirmDialog
     @toogle_status = Array(Bool).new(@views.size, true)
 
     @dialog.default_response = Result::DoAction.value
-    @dialog.ref
   end
 
   abstract def model_label : String
@@ -51,15 +50,16 @@ abstract class ConfirmDialog
   # Return true if should do something, false on cancel
   # can be called only once.
   def run : Result
-    return Result::DestructiveAction if @views.empty?
-
-    res = @dialog.run
-    return Result::Cancel if res < 0 || res == Result::Cancel.value
-    return Result::DestructiveAction if res == Result::DestructiveAction.value
-    Result::DoAction
+    not_ported!
+    return Result::Cancel
+#     return Result::DestructiveAction if @views.empty?
+#
+#     res = @dialog.run
+#     return Result::Cancel if res < 0 || res == Result::Cancel.value
+#     return Result::DestructiveAction if res == Result::DestructiveAction.value
+#     Result::DoAction
   ensure
     @dialog.destroy
-    @dialog.unref
   end
 
   def selected_views
@@ -71,9 +71,8 @@ abstract class ConfirmDialog
   end
 
   private def fill_model
-    iter = Gtk::TreeIter.new
     @views.sort_by(&.label).each do |view|
-      @model.append(iter)
+      iter = @model.append
       @model.set(iter, {0, 1, 2}, {true, view.object_id, view.label})
     end
   end

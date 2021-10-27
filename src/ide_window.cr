@@ -397,30 +397,31 @@ class IdeWindow < Window
   end
 
   def save_view(view : View, path : Path? = nil)
-    if view.file_path.nil? || path
-      dlg = Gtk::FileChooserDialog.new(title: "Save file", action: :save, local_only: true, modal: true, do_overwrite_confirmation: true)
-      dlg.current_name = view.label
-      dlg.uri = path.to_uri.to_s unless path.nil?
-      dlg.add_button("Cancel", Gtk::ResponseType::CANCEL.to_i)
-      dlg.add_button("Save", Gtk::ResponseType::ACCEPT.to_i)
-      res = dlg.run
-      if res == Gtk::ResponseType::ACCEPT.to_i
-        file_path = Path.new(dlg.filename.to_s).expand
-        @project.add_path(file_path)
-        # New, unsaved files, have no project path until they are saved.
-        view.project_path = @project.root if view.project_path.nil?
-        view.file_path = file_path
-      end
-
-      dlg.destroy
-      return if res == Gtk::ResponseType::CANCEL.to_i
-    end
-
-    path = view.file_path
-    if path && view.is_a?(TextView)
-      validate_config(view.text) if path == Config.path
-      view.save
-    end
+    not_ported!
+#     if view.file_path.nil? || path
+#       dlg = Gtk::FileChooserDialog.new(title: "Save file", action: :save, local_only: true, modal: true, do_overwrite_confirmation: true)
+#       dlg.current_name = view.label
+#       dlg.uri = path.to_uri.to_s unless path.nil?
+#       dlg.add_button("Cancel", Gtk::ResponseType::CANCEL.to_i)
+#       dlg.add_button("Save", Gtk::ResponseType::ACCEPT.to_i)
+#       res = dlg.run
+#       if res == Gtk::ResponseType::ACCEPT.to_i
+#         file_path = Path.new(dlg.filename.to_s).expand
+#         @project.add_path(file_path)
+#         # New, unsaved files, have no project path until they are saved.
+#         view.project_path = @project.root if view.project_path.nil?
+#         view.file_path = file_path
+#       end
+#
+#       dlg.destroy
+#       return if res == Gtk::ResponseType::CANCEL.to_i
+#     end
+#
+#     path = view.file_path
+#     if path && view.is_a?(TextView)
+#       validate_config(view.text) if path == Config.path
+#       view.save
+#     end
   rescue e : ConfigError
     application.error("There's an error in your config file", e.message.to_s)
   rescue e : IO::Error
