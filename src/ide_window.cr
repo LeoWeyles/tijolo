@@ -653,7 +653,7 @@ class IdeWindow < Window
   end
 
   def ask_about_externally_modified_files
-    return unless main_window.active?
+    return unless main_window.is_active?
 
     view = @view_manager.current_view
     return if view.nil? || !view.externally_modified?

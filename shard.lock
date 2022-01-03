@@ -1,4 +1,3 @@
-# NOTICE: This lockfile contains some overrides from shard.override.yml
 version: 2.0
 shards:
   compiled_license:
@@ -11,11 +10,11 @@ shards:
 
   gi-crystal:
     git: https://github.com/hugopl/gi-crystal.git
-    version: 0.1.0+git.commit.67fecbbb9ac8fd961751b9f7e1659ab0c893aea7
+    version: 0.1.0+git.commit.624b4f23d776d61d4a80c45527199c6f1fd7a5f3
 
-  gtk4: # Overridden
-    path: /home/hugo/src/gtk4
-    version: 0.1.0+git.commit.3d91d0703c092423e30e253ab7978cbd3a63c8ac
+  gtk4:
+    git: https://github.com/hugopl/gtk4.cr.git
+    version: 0.1.0+git.commit.7a8504a3ed8d2bbcd19f109031820a329a178f20
 
   toml:
     git: https://github.com/crystal-community/toml.cr.git
