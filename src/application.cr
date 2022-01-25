@@ -248,8 +248,9 @@ class Application
     end
 
     child = main_window.child
-    main_window.remove(child) unless child.nil?
-    main_window.add(ide_wnd.root)
+    not_ported!
+    # main_window.remove(child) unless child.nil?
+    # main_window.add(ide_wnd.root)
 
     @new_tijolo_btn.not_nil!.show
     ide_wnd

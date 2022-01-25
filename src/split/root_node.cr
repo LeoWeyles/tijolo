@@ -62,7 +62,8 @@ module Split
       @child = child = ViewNode.new(self)
       self.current_view = view
       child.add_view(view)
-      @stack.add(child.widget)
+      not_ported!
+      # @stack.add(child.widget)
       @stack.visible_child = child.widget
       @current_view = view
     end
@@ -74,7 +75,8 @@ module Split
         show_welcome_msg
       else
         new_child.parent = self
-        @stack.add(new_child.widget)
+        not_ported!
+        # @stack.add(new_child.widget)
         @stack.visible_child = new_child.widget
       end
     end

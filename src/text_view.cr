@@ -43,7 +43,8 @@ class TextView < View
     setup_editor
     update_header
 
-    @editor.widget.on_key_press_event(&->key_pressed(Gtk::Widget, Gdk::EventKey))
+    not_ported!
+    # @editor.widget.on_key_press_event(&->key_pressed(Gtk::Widget, Gdk::EventKey))
     @buffer.add_text_buffer_listener(self)
   end
 

@@ -9,7 +9,7 @@ require "./locator"
 require "./notification_area"
 require "./project_monitor"
 require "./project_tree"
-require "./terminal_view.cr"
+# require "./terminal_view.cr"
 require "./text_view"
 require "./tijolo_log_backend"
 require "./tijolo_rc"
@@ -208,7 +208,8 @@ class IdeWindow < Window
     }
     actions.each do |name, closure|
       action = Gio::SimpleAction.new(name.to_s, nil)
-      action.on_activate { closure.call }
+      not_ported!
+      # action.on_activate { closure.call }
       main_window.add_action(action)
 
       shortcut = config.shortcuts[name.to_s]
@@ -218,23 +219,28 @@ class IdeWindow < Window
     # View related actions
     uint64 = GLib::VariantType.new("t")
     action = Gio::SimpleAction.new("copy_full_path", uint64)
-    action.on_activate(&->copy_view_full_path(Gio::SimpleAction, GLib::Variant?))
+    not_ported!
+    # action.on_activate(&->copy_view_full_path(Gio::SimpleAction, GLib::Variant?))
     main_window.add_action(action)
 
     action = Gio::SimpleAction.new("copy_full_path_and_line", uint64)
-    action.on_activate(&->copy_view_full_path_and_line(Gio::SimpleAction, GLib::Variant?))
+    not_ported!
+    # action.on_activate(&->copy_view_full_path_and_line(Gio::SimpleAction, GLib::Variant?))
     main_window.add_action(action)
 
     action = Gio::SimpleAction.new("copy_file_name", uint64)
-    action.on_activate(&->copy_view_file_name(Gio::SimpleAction, GLib::Variant?))
+    not_ported!
+    # action.on_activate(&->copy_view_file_name(Gio::SimpleAction, GLib::Variant?))
     main_window.add_action(action)
 
     action = Gio::SimpleAction.new("copy_relative_path", uint64)
-    action.on_activate(&->copy_view_relative_path(Gio::SimpleAction, GLib::Variant?))
+    not_ported!
+    # action.on_activate(&->copy_view_relative_path(Gio::SimpleAction, GLib::Variant?))
     main_window.add_action(action)
 
     action = Gio::SimpleAction.new("copy_relative_path_and_line", uint64)
-    action.on_activate(&->copy_view_relative_path_and_line(Gio::SimpleAction, GLib::Variant?))
+    not_ported!
+    # action.on_activate(&->copy_view_relative_path_and_line(Gio::SimpleAction, GLib::Variant?))
     main_window.add_action(action)
   end
 
@@ -273,9 +279,10 @@ class IdeWindow < Window
   end
 
   def create_terminal
-    view = TerminalView.new
-    @view_manager.add_view(view, true)
-    view.add_view_listener(self)
+    not_ported!
+    # view = TerminalView.new
+    # @view_manager.add_view(view, true)
+    # view.add_view_listener(self)
   end
 
   # Call create_view instead of this.
@@ -544,12 +551,14 @@ class IdeWindow < Window
 
   def copy_terminal_text
     view = @view_manager.current_view
-    view.copy_text_to_clipboard if view.is_a?(TerminalView)
+    not_ported!
+    # view.copy_text_to_clipboard if view.is_a?(TerminalView)
   end
 
   def paste_terminal_text
     view = @view_manager.current_view
-    view.paste_text_from_clipboard if view.is_a?(TerminalView)
+    not_ported!
+    # view.paste_text_from_clipboard if view.is_a?(TerminalView)
   end
 
   private def clipboard
@@ -567,41 +576,46 @@ class IdeWindow < Window
   private def copy_view_full_path(_action, view_id : GLib::Variant?)
     return if view_id.nil?
 
-    with_view_and_path(view_id.uint64) do |_view, path|
-      clipboard.text = path.to_s
-    end
+    not_ported!
+    # with_view_and_path(view_id.uint64) do |_view, path|
+    #   clipboard.text = path.to_s
+    # end
   end
 
   private def copy_view_full_path_and_line(_action, view_id : GLib::Variant?)
     return if view_id.nil?
 
-    with_view_and_path(view_id.uint64) do |view, path|
-      clipboard.text = "#{path}:#{view.cursor_pos[0] + 1}"
-    end
+    not_ported!
+    # with_view_and_path(view_id.uint64) do |view, path|
+    #   clipboard.text = "#{path}:#{view.cursor_pos[0] + 1}"
+    # end
   end
 
   private def copy_view_file_name(_action, view_id : GLib::Variant?)
     return if view_id.nil?
 
-    with_view_and_path(view_id.uint64) do |_view, path|
-      clipboard.text = path.basename.to_s
-    end
+    not_ported!
+    # with_view_and_path(view_id.uint64) do |_view, path|
+    #   clipboard.text = path.basename.to_s
+    # end
   end
 
   private def copy_view_relative_path(_action, view_id : GLib::Variant?)
     return if view_id.nil?
 
-    with_view_and_path(view_id.uint64) do |_view, path|
-      clipboard.text = path.relative_to(@project.root).to_s
-    end
+    not_ported!
+    # with_view_and_path(view_id.uint64) do |_view, path|
+    #   clipboard.text = path.relative_to(@project.root).to_s
+    # end
   end
 
   private def copy_view_relative_path_and_line(_action, view_id : GLib::Variant?)
     return if view_id.nil?
 
-    with_view_and_path(view_id.uint64) do |view, path|
-      clipboard.text = "#{path.relative_to(@project.root)}:#{view.cursor_pos[0] + 1}"
-    end
+    not_ported!
+    # with_view_and_path(view_id.uint64) do |view, path|
+    #   clipboard.text = "#{path.relative_to(@project.root)}:#{view.cursor_pos[0] + 1}"
+    # end
   end
 
   # Go back on cursor position history

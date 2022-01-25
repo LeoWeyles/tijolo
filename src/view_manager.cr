@@ -160,7 +160,8 @@ class ViewManager
       change_current_view(view)
     end
     view.add_view_listener(self)
-    view.show_all
+    not_ported!
+    # view.show_all
     view
   end
 

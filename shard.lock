@@ -10,11 +10,11 @@ shards:
 
   gi-crystal:
     git: https://github.com/hugopl/gi-crystal.git
-    version: 0.1.0+git.commit.624b4f23d776d61d4a80c45527199c6f1fd7a5f3
+    version: 0.3.0+git.commit.ebfe5bf8de0705e0141a64ce5831653c3235e8d0
 
   gtk4:
     git: https://github.com/hugopl/gtk4.cr.git
-    version: 0.1.0+git.commit.7a8504a3ed8d2bbcd19f109031820a329a178f20
+    version: 0.2.0+git.commit.47886a8534461418055329e2e4f754f6205da517
 
   toml:
     git: https://github.com/crystal-community/toml.cr.git

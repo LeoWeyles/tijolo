@@ -15,13 +15,15 @@ module Split
       super(parent)
       @stack = Gtk::Stack.new
       @overlay = Gtk::Overlay.new
-      @overlay.add(@stack)
+      not_ported!
+      # @overlay.add(@stack)
 
       @gtk_label = Gtk::Label.new
       @gtk_label.style_context.add_class("split-label")
 
       @overlay.add_overlay(@gtk_label)
-      @overlay.show_all
+      not_ported!
+      # @overlay.show_all
       @gtk_label.hide
     end
 

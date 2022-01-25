@@ -37,7 +37,8 @@ abstract class View
 
   getter widget : Gtk::Widget
 
-  delegate show_all, to: @view_widget
+  # not_ported!
+  # delegate show_all, to: @view_widget
   delegate grab_focus, to: @view_widget
 
   @monitor : Gio::FileMonitor?
@@ -51,13 +52,15 @@ abstract class View
     @editor_header = Gtk::Widget.cast(builder["editor_header"])
     @line_column_label = Gtk::Label.cast(builder["line_column"])
     @file_path_label = Gtk::MenuButton.cast(builder["file_path"])
-    @file_path_label.on_button_press_event do |_widget, _event|
-      @file_path_label.clicked unless @file_path.nil?
-      true
-    end
+    not_ported!
+    # @file_path_label.on_button_press_event do |_widget, _event|
+    #   @file_path_label.clicked unless @file_path.nil?
+    #   true
+    # end
 
     container = Gtk::ScrolledWindow.cast(builder["container"])
-    container.add(@view_widget)
+    not_ported!
+    # container.add(@view_widget)
 
     @id = object_id.to_s
     if file_path
@@ -66,21 +69,24 @@ abstract class View
       @label = untitled_name
     end
 
-    @view_widget.on_focus_in_event do
-      notify_view_focused(self)
-      false
-    end
+    not_ported!
+    # @view_widget.on_focus_in_event do
+    #   notify_view_focused(self)
+    #   false
+    # end
 
-    variant_self = GLib::Variant.new_uint64(self.object_id)
-    Gtk::ModelButton.cast(builder["copy_full_path"]).action_target_value = variant_self
-    Gtk::ModelButton.cast(builder["copy_full_path_and_line"]).action_target_value = variant_self
-    Gtk::ModelButton.cast(builder["copy_file_name"]).action_target_value = variant_self
-    Gtk::ModelButton.cast(builder["copy_relative_path_and_line"]).action_target_value = variant_self
-    Gtk::ModelButton.cast(builder["copy_relative_path"]).action_target_value = variant_self
+    not_ported!
+    # variant_self = GLib::Variant.new_uint64(self.object_id)
+    # Gtk::ModelButton.cast(builder["copy_full_path"]).action_target_value = variant_self
+    # Gtk::ModelButton.cast(builder["copy_full_path_and_line"]).action_target_value = variant_self
+    # Gtk::ModelButton.cast(builder["copy_file_name"]).action_target_value = variant_self
+    # Gtk::ModelButton.cast(builder["copy_relative_path_and_line"]).action_target_value = variant_self
+    # Gtk::ModelButton.cast(builder["copy_relative_path"]).action_target_value = variant_self
   end
 
   def destroy
-    @view_widget.destroy
+    not_ported!
+    # @view_widget.destroy
     @monitor.try(&.cancel)
     @monitor = nil
   end
@@ -110,7 +116,8 @@ abstract class View
     return if monitor || virtual? || file_path.nil?
 
     @monitor = monitor = Gio::File.new_for_path(file_path.to_s).monitor_file(:none, nil)
-    monitor.on_changed(&->file_changed_event(Gio::FileMonitor, Gio::File, Gio::File?, Gio::FileMonitorEvent))
+    not_ported!
+    # monitor.on_changed(&->file_changed_event(Gio::FileMonitor, Gio::File, Gio::File?, Gio::FileMonitorEvent))
   end
 
   private def file_changed_event(_monitor : Gio::FileMonitor, file : Gio::File, other_file : Gio::File?, event : Gio::FileMonitorEvent)
